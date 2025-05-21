@@ -12,3 +12,63 @@
 //Promedio general
 //
 //La calificación más alta y la más baja
+
+const { ask } = require('../helpers/input');
+
+async function main() {
+  const input = await ask("Ingresa las calificaciones separadas por comas en base a 100: ");
+  
+  
+const calificaciones = input
+   .split(',')
+   .map(e => parseInt(e.trim(), 10))
+   .filter(n => !isNaN(n) && n >= 0 && n <= 100); 
+
+
+  function analizarCalificaciones(calificaciones) {
+    if (calificaciones.length === 0) {
+      return null;
+    }
+
+    let aprobados = 0;
+    let reprobados = 0;
+    let suma = 0;
+    let max = calificaciones[0];
+    let min = calificaciones[0];
+
+    for (const calificacion of calificaciones) {
+      if (calificacion >= 70) {
+        aprobados++;
+      } else {
+        reprobados++;
+      }
+
+      suma += calificacion;
+
+      if (calificacion > max) max = calificacion;
+      if (calificacion < min) min = calificacion;
+    }
+
+    const promedio = suma / calificaciones.length;
+
+    return {
+      aprobados,
+      reprobados,
+      promedio,
+      max,
+      min
+    };
+  }
+
+  const resultado = analizarCalificaciones(calificaciones);
+
+  
+  console.log("\n Resultado del análisis:");
+  console.log(`Aprobados: ${resultado.aprobados}`);
+  console.log(`Reprobados: ${resultado.reprobados}`);
+  console.log(`Promedio: ${resultado.promedio}`);
+  console.log(`Calificación más alta: ${resultado.max}`);
+  console.log(`Calificación más baja: ${resultado.min}`);
+}
+
+main();
